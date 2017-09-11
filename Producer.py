@@ -14,10 +14,8 @@ def rowToString(row):
 # logging.basicConfig(level = logging.DEBUG)
 producer = KafkaProducer(bootstrap_servers='localhost:9092')
 
-file_dirs = glob.glob('*.csv')
-# print (file_dirs)
+file_dirs = glob.glob('./Data/*.csv')
 for file in file_dirs:
-	# print (file)
 	csv_path = file
 	# csv_path = "_slash_vehicle_slash_tire_pressure_report.csv"
 	with open(csv_path, "r") as f_obj:
@@ -27,7 +25,7 @@ for file in file_dirs:
 			if count is not True:
 				count = True
 				continue
-			producer.send('my-topic', key = str.encode(csv_path), value = str.encode(rowToString(row)))
+			producer.send('my-topic', key = str.encode(csv_path[7:]), value = str.encode(rowToString(row)))
 
 # block until all async messages are sent
 producer.flush()
